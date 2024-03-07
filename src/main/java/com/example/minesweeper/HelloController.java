@@ -25,11 +25,14 @@ public class HelloController {
         return arr;
     }
 
-//    void startGame(){
-//        char[][] arr = getMinesArr();
-//    }
+    static void startGame(){}
+    static void endGame(){}
 
-    static int countMinesAround(char[][] gameField, int rowIndex, int columnIndex){
+
+    static int countMinesAround(char[][] gameField,int columnIndex, int rowIndex){
+        if(gameField[columnIndex][rowIndex] == 'x'){
+            endGame();
+        }
         int count = 0;
         for(int x = columnIndex-1; x <= columnIndex+1; ++x){
             for(int y = rowIndex-1; y <= rowIndex+1; ++y){
