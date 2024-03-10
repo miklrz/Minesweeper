@@ -9,8 +9,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
-public class HelloController {
+public class Controller {
+
+    @FXML
+    private Text endText;
 
     @FXML
     private Button
@@ -26,7 +30,16 @@ public class HelloController {
             button90,button91,button92,button93,button94,button95,button96,button97,button98,button99;
 
     List<Button> buttons;
-    private boolean gameStarted = false;
+//    private boolean gameStarted = false;
+
+    char[][] gameField;
+
+    @FXML
+    private ResourceBundle resources;
+
+    @FXML
+    private URL location;
+
 
     static char[][] getMinesArr(int N, int mines){
         char[][] arr = new char[N][N];
@@ -41,13 +54,11 @@ public class HelloController {
         return arr;
     }
 
-    static void startGame(){}
-    static void endGame(){}
 
 
     static int countMinesAround(char[][] gameField,int columnIndex, int rowIndex){
         if(gameField[columnIndex][rowIndex] == 'x'){
-            endGame();
+            return -1;
         }
         int count = 0;
         for(int x = columnIndex-1; x <= columnIndex+1; ++x){
@@ -62,13 +73,6 @@ public class HelloController {
         return count;
     }
 
-    char[][] gameField = getMinesArr(10,30);
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
 
     @FXML
@@ -78,21 +82,26 @@ public class HelloController {
         int columnIndex = GridPane.getColumnIndex(btn) == null ? 0 : GridPane.getColumnIndex(btn);
         btn.setText("qwe");
         btn.setDisable(true);
+        String count = String.valueOf(countMinesAround(gameField,columnIndex,rowIndex));
+        btn.setText(count);
 //        ActionEvent qwe = new ActionEvent();
 //        qwe.getTarget();
 
 
 
 //        System.out.printf("r: %d    c: %d\n",rowIndex,columnIndex);
-//        if(gameField[columnIndex][rowIndex] == 'x') btn.setText("пиздец!");
-//        else{
-//            btn.setText("Круто");
-//        }
+        if(gameField[columnIndex][rowIndex] == 'x'){
+            buttons.forEach(this::buttonOff);
+            endText.setText("Ты проиграл челик!");
+        }
 
     }
 
+
+
     @FXML
     void initialize() {
+        gameField =  getMinesArr(10,5);
         buttons = new ArrayList<>(Arrays.asList(
                 button00,button01,button02,button03,button04,button05,button06,button07,button08,button09,
                 button10,button11,button12,button13,button14,button15,button16,button17,button18,button19,
@@ -105,11 +114,21 @@ public class HelloController {
                 button80,button81,button82,button83,button84,button85,button86,button87,button88,button89,
                 button90,button91,button92,button93,button94,button95,button96,button97,button98,button99
         ));
+        endText.setText("");
     }
 
     @FXML
     void resetGame(ActionEvent event) {
+        buttons.forEach(this::resetButton);
+        initialize();
+    }
 
+    void resetButton(Button button){
+        button.setDisable(false);
+        button.setText("");
+    }
+    void buttonOff(Button button){
+        button.setDisable(true);
     }
 
 
