@@ -73,6 +73,7 @@ public class Controller {
         return count;
     }
 
+//    void checkNear(){}
 
 
     @FXML
@@ -80,21 +81,28 @@ public class Controller {
         Button btn = (Button)event.getSource();
         int rowIndex = GridPane.getRowIndex(btn) == null ? 0 :  GridPane.getRowIndex(btn);
         int columnIndex = GridPane.getColumnIndex(btn) == null ? 0 : GridPane.getColumnIndex(btn);
-        btn.setText("qwe");
         btn.setDisable(true);
         String count = String.valueOf(countMinesAround(gameField,columnIndex,rowIndex));
-        btn.setText(count);
-//        ActionEvent qwe = new ActionEvent();
-//        qwe.getTarget();
-
-
-
-//        System.out.printf("r: %d    c: %d\n",rowIndex,columnIndex);
         if(gameField[columnIndex][rowIndex] == 'x'){
             buttons.forEach(this::buttonOff);
             endText.setText("Ты проиграл челик!");
         }
 
+    }
+
+    void openButtons(char[][] gameField, int columnIndex, int rowIndex) {
+        for (int x = columnIndex - 1; x <= columnIndex + 1; ++x) {
+            for (int y = rowIndex - 1; y <= rowIndex + 1; ++y) {
+                try {
+                    if (countMinesAround(gameField, x, y) == 0) {
+                        Button tempButton = buttons.get(x * 9 + y);
+                        tempButton.setDisable(true);
+                        openButtons(gameField, x, y);
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }
     }
 
 
