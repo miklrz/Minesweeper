@@ -80,11 +80,15 @@ public class Controller {
                     Button temp = buttons.get(y*10+x);
                     if((!temp.isDisable()) && gameField[x][y] !='x'){
                         int count = countMinesAround(gameField,x,y);
-                        if(count == 0) temp.setDisable(true);
+                        if(count == 0) {
+                            temp.setDisable(true);
+                            func(gameField, x, y);
+                        }
                         else {
                             temp.setText(String.valueOf(count));
                             temp.setDisable(true);
                         }
+
                     }
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
@@ -97,7 +101,7 @@ public class Controller {
         Button btn = (Button) event.getSource();
         int rowIndex = GridPane.getRowIndex(btn) == null ? 0 : GridPane.getRowIndex(btn);
         int columnIndex = GridPane.getColumnIndex(btn) == null ? 0 : GridPane.getColumnIndex(btn);
-        
+
         String count = String.valueOf(countMinesAround(gameField, columnIndex, rowIndex));
         if(!count.equals("0")) btn.setText(count);
         btn.setDisable(true);
@@ -107,12 +111,11 @@ public class Controller {
             endText.setText("ИДИ НАХУЙ!");
         }
         func(gameField,columnIndex,rowIndex);
-//        updateField(gameField,10);
     }
 
     @FXML
     void initialize() {
-        gameField = getMinesArr(10, 5);
+        gameField = getMinesArr(10, 20);
         buttons = new ArrayList<>(Arrays.asList(
                 button00, button10, button20, button30, button40, button50, button60, button70, button80, button90,
                 button01, button11, button21, button31, button41, button51, button61, button71, button81, button91,
@@ -135,7 +138,7 @@ public class Controller {
     }
 
     @FXML
-    void resetGame(ActionEvent event) {
+    void resetGame() {
         buttons.forEach(this::resetButton);
         initialize();
     }
@@ -183,7 +186,7 @@ public class Controller {
 
 //        openZeroButtons(gameField,columnIndex,rowIndex);
 
-//        System.out.println(gameField[columnIndex][rowIndex] + " " + buttons.get(rowIndex*10+columnIndex) +" "+ columnIndex +" "+ rowIndex);
+//        System.out.println(gameField[columnIndex][rowIndex] + " " + buttons.get(rowIndex*10+columnIndex) +" "+ columnIndex +" "+ rowIndex));
 //        Button temp = buttons.get(rowIndex*10+columnIndex);
 //        temp.setDisable(true);
 //        openNear(gameField,columnIndex,rowIndex);
