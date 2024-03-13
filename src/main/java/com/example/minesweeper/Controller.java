@@ -86,8 +86,8 @@ public class Controller {
         }
         openZeroButtons(gameField,columnIndex,rowIndex);
 
-        System.out.println(gameField[columnIndex][rowIndex] + " " + buttons.get(columnIndex*9+rowIndex) +" "+ columnIndex +" "+ rowIndex);
-        Button temp = buttons.get(columnIndex*rowIndex);
+        System.out.println(gameField[columnIndex][rowIndex] + " " + buttons.get(rowIndex*10+columnIndex) +" "+ columnIndex +" "+ rowIndex);
+        Button temp = buttons.get(rowIndex*10+columnIndex);
         temp.setDisable(true);
 //        openNear(gameField,columnIndex,rowIndex);
 
