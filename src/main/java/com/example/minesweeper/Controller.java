@@ -55,21 +55,41 @@ public class Controller {
     }
 
 
-    static int countMinesAround(char[][] gameField, int columnIndex, int rowIndex) {
+    int countMinesAround(char[][] gameField, int columnIndex, int rowIndex) {
         if (gameField[columnIndex][rowIndex] == 'x') {
             return -1;
         }
         int count = 0;
         for (int x = columnIndex - 1; x <= columnIndex + 1; ++x) {
             for (int y = rowIndex - 1; y <= rowIndex + 1; ++y) {
-                if (x == columnIndex && y == rowIndex) continue;
+                if (x == columnIndex && y == rowIndex || x < 0 || x > 9 || y < 0 || y > 9) continue;
                 try {
                     if (gameField[x][y] == 'x') count++;
-                } catch (ArrayIndexOutOfBoundsException ignored) {
+                } catch (IndexOutOfBoundsException ignored) {
                 }
             }
         }
         return count;
+    }
+
+    void func(char[][] gameField, int columnIndex, int rowIndex) {
+        for (int x = columnIndex - 1; x <= columnIndex + 1; ++x) {
+            for (int y = rowIndex - 1; y <= rowIndex + 1; ++y) {
+                if (x == columnIndex && y == rowIndex || x < 0 || x > 9 || y < 0 || y > 9) continue;
+                try {
+                    Button temp = buttons.get(y*10+x);
+                    if((!temp.isDisable()) && gameField[x][y] !='x'){
+                        int count = countMinesAround(gameField,x,y);
+                        if(count == 0) temp.setDisable(true);
+                        else {
+                            temp.setText(String.valueOf(count));
+                            temp.setDisable(true);
+                        }
+                    }
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                }
+            }
+        }
     }
 
     @FXML
@@ -77,13 +97,16 @@ public class Controller {
         Button btn = (Button) event.getSource();
         int rowIndex = GridPane.getRowIndex(btn) == null ? 0 : GridPane.getRowIndex(btn);
         int columnIndex = GridPane.getColumnIndex(btn) == null ? 0 : GridPane.getColumnIndex(btn);
+        
+        String count = String.valueOf(countMinesAround(gameField, columnIndex, rowIndex));
+        if(!count.equals("0")) btn.setText(count);
         btn.setDisable(true);
-//        String count = String.valueOf(countMinesAround(gameField, columnIndex, rowIndex));
+
         if (gameField[columnIndex][rowIndex] == 'x') {
             buttons.forEach(this::buttonOff);
             endText.setText("ИДИ НАХУЙ!");
         }
-
+        func(gameField,columnIndex,rowIndex);
 //        updateField(gameField,10);
     }
 
