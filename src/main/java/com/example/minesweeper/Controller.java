@@ -1,10 +1,8 @@
 package com.example.minesweeper;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -45,36 +43,17 @@ public class Controller {
     static char[][] getMinesArr(int N, int mines, int x, int y) {
         char[][] arr = new char[N][N];
         int count = 0;
-        //arr != ((y-1)*10 + x-1) to ((y+1)*10 + x+1)
-        // 10y +x -11 to 10y + x + 11
         int border1 = 10*y +x -11;
         int border2 = 10*y + x + 11;
         if(border1 <0) border1 = 0;
         if (border2 >= N*N) border2 = N*N-1;
-        while (count < mines) { // x !=
-            int chose = (int) (Math.random()*1);
-//            int newPath = ((int) (Math.random() * ((N-1)*(N-1))));
-//                if (arr[newPath % (N - 1)][newPath / (N - 1)] != 'x' && newPath <border1 && newPath > border2){
-//                    arr[newPath % (N - 1)][newPath / (N - 1)] = 'x';
-//                    count++;
-//                }
-            if(chose == 0){
-                int newPath = ((int) (Math.random() * border1));
-                if (arr[newPath % (N - 1)][newPath / (N - 1)] != 'x') {
-                    arr[newPath % (N - 1)][newPath / (N - 1)] = 'x';
-                    count++;
-                }
-                System.out.println(newPath % (N - 1)+ " " +newPath / (N - 1));
-
-            }
-            if(chose == 1){
-                int newPath = ((int) (Math.random() * (N*N - border2) + border2));
-                if (arr[newPath % (N - 1)][newPath / (N - 1)] != 'x') {
-                    arr[newPath % (N - 1)][newPath / (N - 1)] = 'x';
-                    count++;
-                }
-                System.out.println(newPath % (N - 1)+ " " +newPath / (N - 1));
-            }
+        while (count < mines){
+            Random r = new Random();
+            int firstMine = r.nextInt(border1);
+            int secondMine = border2 + r.nextInt(100-border2);
+            arr[firstMine%10][firstMine/10] = 'x';
+            arr[secondMine%10][secondMine/10] = 'x';
+            count += 2;
         }
         return arr;
     }
@@ -189,92 +168,3 @@ public class Controller {
         button.setDisable(true);
     }
 }
-
-
-//    void updateField(char[][] gameField, int n) {
-//        for (int x = 0; x < n; ++x) {
-//            for (int y = 0; y < n; ++y) {
-//                Button now = buttons.get(x * 10 + y);
-//                if(now.isDisable()) continue;
-//                if (x * 10 + y +10 < n * n && x * 10 + y +10 >= 0 ) {
-//                    Button check1 = buttons.get(x * 10 + y + 10);
-//                    if (!check1.isDisabled()) {
-//                        now.setDisable(true);
-//                    }
-//                } else if (x * 10 + y +1 < n * n && x * 10 + y +1 >= 0) {
-//                    Button check2 = buttons.get(x * 10 + y + 1);
-//                    if (!check2.isDisabled()) {
-//                        now.setDisable(true);
-//                    }
-//                } else if (x * 10 + y -1 < n * n && x * 10 + y -1 >= 0){
-//                    Button check3 = buttons.get(x * 10 + y - 1);
-//                    if (!check3.isDisabled()) {
-//                        now.setDisable(true);
-//                    }
-//                } else if (x * 10 + y -10 < n * n && x * 10 + y -10 >= 0) {
-//                    Button check4 = buttons.get(x * 10 + y - 10);
-//                    if (!check4.isDisabled()) {
-//                        now.setDisable(true);
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-//        openZeroButtons(gameField,columnIndex,rowIndex);
-
-//        System.out.println(gameField[columnIndex][rowIndex] + " " + buttons.get(rowIndex*10+columnIndex) +" "+ columnIndex +" "+ rowIndex));
-//        Button temp = buttons.get(rowIndex*10+columnIndex);
-//        temp.setDisable(true);
-//        openNear(gameField,columnIndex,rowIndex);
-
-
-//        if(countMinesAround(gameField,columnIndex,rowIndex) == 0){
-//            openButtons();
-//        }
-//        else {
-//            openNear();
-//        }
-
-
-//    boolean isNearNullButton(char[][] gameField, int columnIndex, int rowIndex) {
-//        for (int x = columnIndex - 1; x <= columnIndex + 1; ++x) {
-//            for (int y = rowIndex - 1; y <= rowIndex + 1; ++y) {
-//                try {
-//                    if(x==columnIndex && y==rowIndex) continue;
-//                    Button tempButton = buttons.get(columnIndex * 10 + rowIndex);
-//                    if(tempButton.isDisable() && gameField[x][y] !='x') return true;
-//                } catch (ArrayIndexOutOfBoundsException ignored) {
-//                }
-//            }
-//        }
-//        return false;
-//    }
-//    void openZeroButtons(char[][] gameField, int columnIndex, int rowIndex) {
-//        for (int x = columnIndex - 1; x <= columnIndex + 1; ++x) {
-//            for (int y = rowIndex - 1; y <= rowIndex + 1; ++y) {
-//                try {
-//                    if(x==columnIndex && y==rowIndex) continue;
-//                    if (gameField[x][y]!='x') {
-//                        Button tempButton = buttons.get(columnIndex * 10 + rowIndex);
-//                        if(isNearNullButton(gameField,x,y))tempButton.setDisable(true);
-//                    }
-//                } catch (ArrayIndexOutOfBoundsException ignored) {
-//                }
-//            }
-//        }
-//    }
-
-//    void openNear(char[][] gameField, int columnIndex, int rowIndex){
-//        for (int x = columnIndex - 1; x <= columnIndex + 1; ++x) {
-//            for (int y = rowIndex - 1; y <= rowIndex + 1; ++y) {
-//                try {
-//                    if (countMinesAround(gameField, x, y) == 0) {
-//                        Button tempButton = buttons.get(x * 10 + y);
-//                        tempButton.setDisable(true);
-//                        openButtons(gameField, x, y);
-//                    }
-//                } catch (Exception ignored) {
-//                }
-//            }
-//        }
