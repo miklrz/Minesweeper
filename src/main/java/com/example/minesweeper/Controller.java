@@ -1,6 +1,4 @@
 package com.example.minesweeper;
-
-import java.net.URL;
 import java.util.*;
 
 import javafx.event.ActionEvent;
@@ -31,12 +29,6 @@ public class Controller {
 //    private boolean gameStarted = false;
 
     char[][] gameField;
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     private boolean isStarted;
 
@@ -107,16 +99,10 @@ public class Controller {
         int columnIndex = GridPane.getColumnIndex(btn) == null ? 0 : GridPane.getColumnIndex(btn);
 
         if(!isStarted){
-            gameField = getMinesArr(10,15,rowIndex,columnIndex);
+            gameField = getMinesArr(10,20,rowIndex,columnIndex);
             isStarted = true;
         }
 
-        for(int i = 0; i < 10; ++i){
-            for(int j = 0; j < 10; ++j){
-                System.out.print(gameField[i][j] + " ");
-            }
-            System.out.println();
-        }
 
         String count = String.valueOf(countMinesAround(gameField, columnIndex, rowIndex));
         if(!count.equals("0")) btn.setText(count);
@@ -125,6 +111,7 @@ public class Controller {
         if (gameField[columnIndex][rowIndex] == 'x') {
             buttons.forEach(this::buttonOff);
             endText.setText("ИДИ НАХУЙ!");
+            vzriv(gameField);
         }
         func(gameField,columnIndex,rowIndex);
     }
@@ -145,12 +132,6 @@ public class Controller {
         ));
         endText.setText("");
         isStarted = false;
-//        for(int y = 0; y < 10; ++y){
-//            for(int x = 0; x < 10; ++x){
-//                System.out.print(gameField[x][y] + " ");
-//            }
-//            System.out.println();
-//        }
     }
 
     @FXML
@@ -166,5 +147,16 @@ public class Controller {
 
     void buttonOff(Button button) {
         button.setDisable(true);
+    }
+
+    void vzriv(char[][] arr){
+        for(int i = 0; i < 9; ++i){
+            for(int j = 0; j < 9; ++j){
+                if(arr[i][j] == 'x'){
+                    Button btn = buttons.get(i*10+j);
+                    btn.setText("X");
+                }
+            }
+        }
     }
 }
