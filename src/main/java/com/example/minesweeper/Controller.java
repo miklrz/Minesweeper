@@ -80,10 +80,10 @@ public class Controller {
                             func(gameField, x, y);
                         }
                         else {
-                            temp.setText(String.valueOf(count));
+                            String cnt = String.valueOf(count);
+                            temp.setText(Objects.equals(cnt, "-1") ? "" : cnt);
                             temp.setDisable(true);
                         }
-
                     }
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
